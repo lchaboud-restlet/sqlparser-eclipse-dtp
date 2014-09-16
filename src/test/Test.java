@@ -15,6 +15,24 @@ import org.eclipse.datatools.sqltools.parsers.sql.query.SQLQueryParserManagerPro
 public class Test {
 
 	public static void main(final String[] args) {
+		// SELECT : OK
+		parse("SELECT * FROM test");
+
+		// DELETE : OK
+		parse("DELETE FROM test");
+
+		// CREATE TABLE : KO : "Unable to parse the input"
+		parse("CREATE TABLE films (\n"+
+				"    code        char(5) CONSTRAINT firstkey PRIMARY KEY,\n"+
+				"    title       varchar(40) NOT NULL,\n"+
+				"    did         integer NOT NULL,\n"+
+				"    date_prod   date,\n"+
+				"    kind        varchar(10),\n"+
+				"    len         interval hour to minute\n"+
+				")");
+	}
+
+	private static void parse(final String sql) {
 		try {
 			// Create an instance the Parser Manager
 			// SQLQueryParserManagerProvider.getInstance().getParserManager
@@ -25,18 +43,8 @@ public class Test {
 
 			final SQLQueryParserManager parserManager = SQLQueryParserManagerProvider
 					.getInstance().getParserManager(null, null);
-			//Sample query
-			/*
-			final String sql = "CREATE TABLE films ("+
-					"    code        char(5) CONSTRAINT firstkey PRIMARY KEY,"+
-					"    title       varchar(40) NOT NULL,"+
-					"    did         integer NOT NULL,"+
-					"    date_prod   date,"+
-					"    kind        varchar(10),"+
-					"    len         interval hour to minute"+
-					")";*/
-			//final String sql = "SELECT * FROM test";
-			final String sql = "SELECT col1, col2 FROM test";
+			//Samples
+
 			//Parse
 			final SQLQueryParseResult parseResult = parserManager.parseQuery(sql);
 			// Get the Query Model object from the result
